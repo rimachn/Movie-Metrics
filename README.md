@@ -1,4 +1,4 @@
-# Movie Metrics — User Viewing Behavior Feature Engineering
+# Movie Metrics 
 
 **Project Type:** Data Analysis 
 
