@@ -1,0 +1,82 @@
+table activity
+	isHidden
+	lineageTag: 50259d65-183c-4a71-a760-bcdb616c096d
+
+	column id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 770cbe54-6e8c-4530-b0e2-8ce7a9a64759
+		summarizeBy: sum
+		sourceColumn: id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column user_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f79be427-9c82-46c9-a8f1-5f0f6a597a14
+		summarizeBy: sum
+		sourceColumn: user_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 76f733e5-777d-460d-afb2-fe26975d5996
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column movie_name
+		dataType: string
+		isHidden
+		lineageTag: a7bca9c9-9b93-438c-a11f-bb32ea038956
+		summarizeBy: none
+		sourceColumn: movie_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column finished
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5b97f546-3f96-4a4d-b0b1-85f28f0a195f
+		summarizeBy: sum
+		sourceColumn: finished
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition activity = m
+		mode: import
+		queryGroup: Dimensions
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\rimac\OneDrive\Desktop\Maven Data Drill\5. Movie Metrics\user_activity\activity.csv"),[Delimiter=",", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"id", Int64.Type}, {"user_id", Int64.Type}, {"date", type date}, {"movie_name", type text}, {"finished", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

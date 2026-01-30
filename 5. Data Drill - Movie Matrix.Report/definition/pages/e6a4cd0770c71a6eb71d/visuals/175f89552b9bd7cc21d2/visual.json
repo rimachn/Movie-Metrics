@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "175f89552b9bd7cc21d2",
+  "position": {
+    "x": 10,
+    "y": 42.5,
+    "z": 2000,
+    "height": 113.75,
+    "width": 271.25,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Netflix ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontStyle": "italic",
+                      "fontSize": "28pt",
+                      "color": "#db0000"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "center"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Movie Metrics",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontStyle": "italic",
+                      "fontSize": "28pt",
+                      "color": "#db0000"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "center"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0.1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

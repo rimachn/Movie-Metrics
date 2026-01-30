@@ -1,0 +1,148 @@
+table users_activity
+	lineageTag: 3f322e9f-5f5a-40dd-811a-ecb011794187
+
+	column user_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 97e3dbef-5bbc-4efa-a4d7-f9b2a2b386e0
+		summarizeBy: sum
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_at
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 64fe00c8-4868-4cb8-b78a-449e9d02e42a
+		summarizeBy: none
+		sourceColumn: created_at
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Started =
+			
+			CALCULATE(
+			    COUNT(activity[id]),
+			    FILTER(
+			        activity,
+			        activity[user_id] = users_activity[user_id]
+			    )
+			)
+		formatString: 0
+		lineageTag: 7d0ed062-4b9b-46a0-836b-9f52bd908f3a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Finished =
+			
+			CALCULATE(
+			    COUNT(
+			        activity[id]
+			    ),
+			    FILTER(
+			        activity,
+			        activity[user_id] = users_activity[user_id] &&
+			        activity[finished] = 1
+			    )
+			)
+		formatString: 0
+		lineageTag: 717a83d7-21e0-4151-8fe5-4d2764b7b967
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column First_date =
+			
+			CALCULATE(
+			    MIN(
+			        activity[date]
+			    ),
+			    FILTER(
+			        activity,
+			        activity[user_id] = users_activity[user_id] &&
+			        activity[finished] = 1
+			    )
+			)
+		formatString: Short Date
+		lineageTag: 24bf55f0-41cc-493b-a5c6-8ed5a16abdbd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column First_name = ```
+			
+			CALCULATE(
+			    MIN(
+			        activity[movie_name]
+			    ),
+			    FILTER(
+			        activity,
+			        activity[user_id] = users_activity[user_id] && 
+			        activity[finished] = 1 &&
+			        activity[date] = users_activity[First_date]
+			    )
+			)
+			```
+		lineageTag: 1e142372-fbfc-4a3c-841c-fdc7f3136aca
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Last_Date = ```
+			
+			CALCULATE(
+			    MAX(
+			        activity[date]
+			    ),
+			    FILTER(
+			        activity,
+			        activity[user_id] = users_activity[user_id] &&
+			        activity[finished] = 1 
+			    )
+			)
+			```
+		formatString: Short Date
+		lineageTag: 789ca403-ad3d-403a-9332-9bfee0348b91
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Last_name = ```
+			
+			CALCULATE(
+			    MAX(
+			        activity[movie_name]
+			    ),
+			    FILTER(
+			        activity,
+			        activity[user_id] = users_activity[user_id] &&
+			        activity[finished] = 1 &&
+			        activity[date] = users_activity[Last_Date] 
+			    )
+			)
+			```
+		lineageTag: 24dde246-f80c-48d6-ba7e-d44021e2d788
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition users_activity = m
+		mode: import
+		queryGroup: Fact
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\rimac\OneDrive\Desktop\Maven Data Drill\5. Movie Metrics\user_activity\users.csv"),[Delimiter=",", Columns=3, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"id", Int64.Type}, {"created_at", type date}, {"country_code", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"country_code"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"id", "user_id"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

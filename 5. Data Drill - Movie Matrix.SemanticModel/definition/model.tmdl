@@ -1,0 +1,27 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Dimensions
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Fact
+
+	annotation PBI_QueryGroupOrder = 1
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["activity","users_activity"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table users_activity
+ref table activity
+
+ref cultureInfo en-US
+
